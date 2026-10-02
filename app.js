@@ -22,34 +22,6 @@ document.addEventListener('click', event => {
 window.matchMedia('(min-width: 641px)').addEventListener('change', event => {
   if (event.matches) closeMenu();
 });
-const ritualDescriptions = [
-  'Приходите, выбираете место и знакомитесь. Никакого экзамена на знание традиций: мы расскажем всё, что захочется узнать.',
-  'Знакомимся с сухим листом, согреваем посуду, делаем первый пролив. Пробуем несколько чаёв и замечаем, как меняется вкус одной и той же заварки.',
-  'Разговариваем, задаём вопросы или просто пьём чай в тишине. У вечера нет обязательной темы — найдётся место и для вашей.'
-];
-const ritualTabs = [...document.querySelectorAll('.ritual-tab')];
-function selectRitual(index, focus = false) {
-  ritualTabs.forEach((tab, tabIndex) => {
-    const active = tabIndex === index;
-    tab.classList.toggle('active', active);
-    tab.setAttribute('aria-selected', String(active));
-    tab.tabIndex = active ? 0 : -1;
-  });
-  document.querySelector('#ritual-description').textContent = ritualDescriptions[index];
-  document.querySelector('#ritual-panel').setAttribute('aria-labelledby', ritualTabs[index].id);
-  if (focus) ritualTabs[index].focus();
-}
-ritualTabs.forEach((tab, index) => {
-  tab.addEventListener('click', () => selectRitual(index));
-  tab.addEventListener('keydown', event => {
-    let next;
-    if (event.key === 'ArrowRight' || event.key === 'ArrowDown') next = (index + 1) % ritualTabs.length;
-    if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') next = (index + ritualTabs.length - 1) % ritualTabs.length;
-    if (event.key === 'Home') next = 0;
-    if (event.key === 'End') next = ritualTabs.length - 1;
-    if (next !== undefined) { event.preventDefault(); selectRitual(next, true); }
-  });
-});
 const formatSelect = document.querySelector('#guest-format');
 const guestCount = document.querySelector('#guest-count');
 const minusButton = document.querySelector('#guest-minus');
@@ -59,7 +31,7 @@ const bookingStatus = document.querySelector('.booking-status');
 function updateDraft() {
   const count = Number(guestCount.value);
   const guestWord = count === 1 ? 'гость' : count < 5 ? 'гостя' : 'гостей';
-  const message = `Андрей, здравствуйте! Хочу узнать о ближайшей встрече. Формат: ${formatSelect.value}. Нас будет ${count} ${guestWord}. Подскажите, пожалуйста, даты, стоимость и свободные места.`;
+  const message = `Андрей, привет! Хочу прийти на чай. Формат: ${formatSelect.value}. Планируем прийти: ${count} ${guestWord}. Подскажи, пожалуйста, ближайшие даты, стоимость и свободные места.`;
   bookingForm.action = `https://t.me/midkam?text=${encodeURIComponent(message)}`;
   minusButton.disabled = count <= 1;
   plusButton.disabled = count >= 7;
